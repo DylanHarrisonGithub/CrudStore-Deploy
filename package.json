@@ -1,0 +1,26 @@
+{
+  "name": "crudstore",
+  "version": "1.0.0",
+  "description": "Ecommerce app",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DylanHarrisonGithub/CrudStore.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/DylanHarrisonGithub/CrudStore/issues"
+  },
+  "homepage": "https://github.com/DylanHarrisonGithub/CrudStore#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.18.1"
+  },
+  "devDependencies": {
+    "@types/express": "^4.17.14"
+  }
+}
