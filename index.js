@@ -18,16 +18,18 @@ const cookie_parser_1 = __importDefault(require("cookie-parser"));
 const express_fileupload_1 = __importDefault(require("express-fileupload"));
 const path_1 = __importDefault(require("path"));
 const server_1 = __importDefault(require("./server/server"));
+const db_service_1 = __importDefault(require("./server/services/db/db.service"));
+const os_1 = __importDefault(require("os"));
 const app = (0, express_1.default)();
-app.use((0, cors_1.default)());
+app.use((0, cors_1.default)({ credentials: true }));
 app.use(express_1.default.json());
 app.use((0, cookie_parser_1.default)());
 app.use((0, express_fileupload_1.default)());
 app.use(express_1.default.urlencoded({ extended: true }));
-app.use('/api', (request, response) => {
-    let pRequest = server_1.default.services.requestParser(request);
-    console.log(pRequest);
-    let res = server_1.default.services.router(server_1.default.services.requestParser(request));
+app.use('/api', (request, response) => __awaiter(void 0, void 0, void 0, function* () {
+    // let pRequest = server.services.requestParser(request);
+    // console.log(pRequest);
+    let res = yield server_1.default.services.router(server_1.default.services.requestParser(request));
     console.log(res);
     Object.keys(res.headers || {}).forEach(key => response.setHeader(key, res.headers[key]));
     if (res.json) {
@@ -45,9 +47,19 @@ app.use('/api', (request, response) => {
     else {
         response.sendStatus(res.code);
     }
-});
+}));
 app.use('/public', express_1.default.static(path_1.default.join(__dirname, 'public')));
 app.use(express_1.default.static(path_1.default.join(__dirname, 'client')));
 app.listen(process.env.PORT || 3000, () => __awaiter(void 0, void 0, void 0, function* () {
     console.log(`CrudStore listening on port ${process.env.PORT || 3000}`);
+    console.log(JSON.stringify(yield db_service_1.default.table.create('user', {
+        id: `SERIAL`,
+        email: 'TEXT',
+        password: 'TEXT',
+        salt: 'TEXT',
+        privilege: `TEXT`,
+        avatar: `TEXT`,
+        PRIMARY: 'KEY (email)'
+    })));
+    console.log(os_1.default.hostname());
 }));

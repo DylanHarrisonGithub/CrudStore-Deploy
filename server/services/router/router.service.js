@@ -1,4 +1,13 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
@@ -43,7 +52,7 @@ const error = (request, response) => {
         };
     }
 };
-const router = (request) => {
+const router = (request) => __awaiter(void 0, void 0, void 0, function* () {
     if (request.hasOwnProperty('route')) {
         let route = server_1.default.routes[request.route];
         if (route) {
@@ -58,7 +67,7 @@ const router = (request) => {
                             return route.route(request);
                         }
                         else {
-                            return error(request, {
+                            return new Promise(res => res(error(request, {
                                 code: 400,
                                 json: {
                                     success: false,
@@ -68,17 +77,17 @@ const router = (request) => {
                                         `Route provides ${route.contentType}`
                                     ]
                                 }
-                            });
+                            })));
                         }
                     }
                     else {
-                        return error(request, {
+                        return new Promise(res => res(error(request, {
                             code: 400,
                             json: {
                                 success: false,
                                 message: ['Validation failed for route parameters.'].concat(validationErrors.map(err => `key: ${err.key}: ${err.message}`))
                             }
-                        });
+                        })));
                     }
                 }
                 else {
@@ -95,7 +104,7 @@ const router = (request) => {
                                         return route.route(request);
                                     }
                                     else {
-                                        return error(request, {
+                                        return new Promise(res => res(error(request, {
                                             code: 400,
                                             json: {
                                                 success: false,
@@ -105,78 +114,78 @@ const router = (request) => {
                                                     `Route provides ${route.contentType}`
                                                 ]
                                             }
-                                        });
+                                        })));
                                     }
                                 }
                                 else {
-                                    return error(request, {
+                                    return new Promise(res => res(error(request, {
                                         code: 400,
                                         json: {
                                             success: false,
                                             message: ['Validation failed for route parameters.'].concat(validationErrors.map(err => `key: ${err.key}: ${err.message}`))
                                         }
-                                    });
+                                    })));
                                 }
                             }
                             else {
-                                return error(request, {
+                                return new Promise(res => res(error(request, {
                                     code: 403,
                                     json: {
                                         success: false,
                                         message: ['Provided authentication does not have privelege to access route.']
                                     }
-                                });
+                                })));
                             }
                         }
                         else {
-                            return error(request, {
+                            return new Promise(res => res(error(request, {
                                 code: 403,
                                 json: {
                                     success: false,
                                     message: ['Provided authentication was not valid.']
                                 }
-                            });
+                            })));
                         }
                     }
                     else {
-                        return error(request, {
+                        return new Promise(res => res(error(request, {
                             code: 401,
                             json: {
                                 success: false,
                                 message: ['Authentication was not provided for protected route.']
                             }
-                        });
+                        })));
                     }
                 }
             }
             else {
-                return error(request, {
+                return new Promise(res => res(error(request, {
                     code: 405,
                     json: {
                         success: false,
                         message: ['Method not allowed.', `Provided route, '${request.route}' is ${route.method} method.`]
                     }
-                });
+                })));
             }
         }
         else {
-            return error(request, {
+            return new Promise(res => res(error(request, {
                 code: 404,
                 json: {
                     success: false,
                     message: [`Provided route, '${request.route}' does not exist.`]
                 }
-            });
+            })));
         }
     }
     else {
-        return error(request, {
+        return new Promise(res => res(error(request, {
             code: 400,
             json: {
                 success: false,
                 message: ['Route was not provided.']
             }
-        });
+        })));
     }
-};
+});
 exports.default = router;
